@@ -36,6 +36,28 @@ const server = http.createServer(async function (request, response){
             return response.end('Not Found');
         }
     }
+    else if (method === 'PUT') {
+        const parts = [];
+        request.on('data', function (part) {
+            parts.push(part);
+        });
+        request.on('end', async function () {
+            const body = Buffer.concat(parts);
+        try {
+            await promise.writeFile(cachefilepath, body);
+            response.writeHead(201, { 'Content-Type': 'text/plain' });
+            response.end('Created');
+        } catch {
+            response.writeHead(500, { 'Content-Type': 'text/plain' });
+            response.end('Internal Server Error');
+        }
+        });
+        request.on('error', function () {
+            response.writeHead(400, { 'Content-Type': 'text/plain' });
+            response.end('Bad Request');
+        });
+        return;
+    }
 });
 
 server.listen(options.port, options.host, function () {
