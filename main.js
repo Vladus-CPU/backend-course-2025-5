@@ -1,7 +1,8 @@
 const fs = require('fs');
 const http = require('http');
 const commander = require('commander');
-
+const superagent = require('superagent');
+const { error } = require('console');
 const program = commander.program;
 
 program
@@ -32,8 +33,16 @@ const server = http.createServer(async function (request, response){
             response.writeHead(200, { 'Content-Type': 'image/jpeg' });
             return response.end(data);
         } catch {
-            response.writeHead(404, { 'Content-Type': 'text/plain' });
-            return response.end('Not Found');
+            try {
+                const catrequest = await superagent.get(`https://http.cat/${statuscode}`);
+                await promise.writeFile(cachefilepath, catrequest.body);
+                const supercat = catrequest.body;
+                response.writeHead(200, { 'Content-Type': 'image/jpeg' });
+                return response.end(supercat);
+            } catch (error) {
+                response.writeHead(404, { 'Content-Type': 'text/plain' });
+                return response.end('Not Found');
+            }
         }
     }
     else if (method === 'PUT') {
