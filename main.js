@@ -68,6 +68,8 @@ const server = http.createServer(async function (request, response){
             return response.end('Not Found');
         }
     }
+    response.writeHead(405, { 'Content-Type': 'text/plain' });
+    return response.end('Method Not Allowed');
 });
 
 server.listen(options.port, options.host, function () {

@@ -9,3 +9,6 @@ curl localhost:9999/200 --output Getting200FromCache.jpeg
  
 Тест 4. Тестування DELETE, видалення файлу з очікуваним кодом 200 ОК та повторне використання для видалення того ж самого файлу для отримання статус коду 404 NOT FOUND
 curl -X DELETE http://localhost:9999/200
+ 
+Тест 5. Тестування Обробки інших запитів, очікуваний результат 405 код Method Not Allowed
+curl -v -X POST http://localhost:9999/200
