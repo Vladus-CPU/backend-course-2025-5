@@ -58,6 +58,16 @@ const server = http.createServer(async function (request, response){
         });
         return;
     }
+    else if (method === 'DELETE') {
+        try {
+            await promise.unlink(cachefilepath);
+            response.writeHead(200, { 'Content-Type': 'text/plain' });
+            return response.end('OK');
+        } catch {
+            response.writeHead(404, { 'Content-Type': 'text/plain' });
+            return response.end('Not Found');
+        }
+    }
 });
 
 server.listen(options.port, options.host, function () {
